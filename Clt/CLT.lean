@@ -39,9 +39,11 @@ namespace ProbabilityTheory
 
 variable {Ω : Type*} {mΩ : MeasurableSpace Ω} {X : ℕ → Ω → ℝ}
 
+/--Standard Gaussian distribution on `ℝ` with mean 0 and variance 1 as a probability measure-/
 abbrev stdGaussian : ProbabilityMeasure ℝ :=
   ⟨gaussianReal 0 1, inferInstance⟩
 
+/--Normalized partial sum -/
 abbrev invSqrtMulSum {Ω} (X : ℕ → Ω → ℝ) (n : ℕ) (ω : Ω) : ℝ :=
   (√n)⁻¹ * ∑ i : Fin n, X i ω
 
@@ -82,7 +84,7 @@ lemma taylor_charFun_two' {X : Ω → ℝ} (hX : Measurable X) {P : Measure Ω} 
     (fun t ↦ charFun (P.map X) t - (1 + P[X] * t * I - P[X ^ 2] * t ^ 2 / 2))
       =o[𝓝 0] fun t ↦ t ^ 2 := by
   -- Apply Taylor's theorem to `charFun`
-  have : IsProbabilityMeasure (P.map X) := isProbabilityMeasure_map hX.aemeasurable
+  have : IsProbabilityMeasure (P.map X) := Measure.isProbabilityMeasure_map hX.aemeasurable
   have h := taylor_charFun hint
   -- simplify the Taylor expansion
   simp only [Nat.reduceAdd, ofReal_inv, ofReal_natCast, mul_pow, Finset.sum_range_succ,
